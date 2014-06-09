@@ -194,8 +194,8 @@ Pod::Spec.new do |s|
     youtube.dependency 'ShareKit/Core'
     youtube.dependency 'Google-API-Client/YouTube'
     youtube.dependency 'Google-API-Client/Common'
-    youtube.dependency 'Google-API-Client/Objects'
-    youtube.dependency 'Google-API-Client/Utilities'
+    # youtube.dependency 'Google-API-Client/Objects'
+    # youtube.dependency 'Google-API-Client/Utilities'
   end
 
   #This version of GooglePlus subspec can coexist with YouTube. The prerequisite is that GooglePlus.framework can be used with 'Google-API-Client/Services/Plus'. Otherwise we must use GoogleOpenSource.framework, which causes conflicts with youtube subspec
