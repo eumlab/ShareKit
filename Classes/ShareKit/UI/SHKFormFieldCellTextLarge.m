@@ -9,7 +9,7 @@
 #import "SHKFormFieldCellTextLarge.h"
 #import "SHKFormFieldCell_PrivateProperties.h"
 #import "SHKFormFieldLargeTextSettings.h"
-#import "SSTextView.h"
+#import "SAMTextView.h"
 
 #import "UIImage+OurBundle.h"
 #import "UIApplication+iOSVersion.h"
@@ -27,7 +27,7 @@
 
 @interface SHKFormFieldCellTextLarge ()
 
-@property (weak, nonatomic) SSTextView *textView;
+@property (weak, nonatomic) SAMTextView *textView;
 @property (weak, nonatomic) UILabel *counter;
 @property (weak, nonatomic) UIImageView *clippedImageView;
 @property (weak, nonatomic) UIImageView *clipImageView;
@@ -41,7 +41,7 @@
 
 - (void)setupLayout {
     
-    SSTextView *textView = [[SSTextView alloc] initWithFrame:[self frameForTextview]];
+    SAMTextView *textView = [[SAMTextView alloc] initWithFrame:[self frameForTextview]];
     textView.delegate = self;
     textView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     textView.contentInset = UIEdgeInsetsMake(-8, 0, 0, 0);
@@ -57,7 +57,7 @@
         
     UILabel *counter = [[UILabel alloc] initWithFrame:counterRect];
     counter.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin;
-    counter.textAlignment = UITextAlignmentRight;
+    counter.textAlignment = NSTextAlignmentRight;
     counter.font = [UIFont systemFontOfSize:17];
     counter.textColor = [UIColor darkGrayColor];
     counter.backgroundColor = [UIColor clearColor];
@@ -90,7 +90,7 @@
                                        CGRectGetHeight(self.clippedImageView.frame)/2);
     UILabel *extension = [[UILabel alloc] initWithFrame:extensionFrame];
     extension.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
-    extension.textAlignment = UITextAlignmentCenter;
+    extension.textAlignment = NSTextAlignmentCenter;
     extension.text = [self.settings extensionForThumbnail];
     extension.backgroundColor = [UIColor clearColor];
     extension.textColor = [UIColor darkGrayColor];
@@ -112,26 +112,6 @@
     return result;
 }
 
-- (UIImage *)thumbnailImage {
-
-    UIImage *result = nil;
-    switch (self.settings.shareType) {
-        case SHKShareTypeURL:
-            result = [UIImage imageNamedFromOurBundle:@"DETweetURLAttachment.png"];
-            break;
-        case SHKShareTypeImage:
-            result = [self.settings imageForThumbnail];
-            break;
-        case SHKShareTypeFile:
-            result = [UIImage imageNamedFromOurBundle:@"SHKShareFileIcon.png"];
-            break;
-        default:
-            break;
-    }
-    
-    return result;
-}
-
 - (void)setupWithSettings:(SHKFormFieldLargeTextSettings *)settings {
     
     [super setupWithSettings:settings];
@@ -147,7 +127,7 @@
     
     if ([self.settings shouldShowThumbnail]) {
         self.clippedImageView.hidden = NO;
-        self.clippedImageView.image = [self thumbnailImage];
+        [self.settings setupThumbnailOnImageView:self.clippedImageView];
         self.clipImageView.hidden = NO;
         self.fileExtension.hidden = NO;
     } else {

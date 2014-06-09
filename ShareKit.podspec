@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name          = 'ShareKit'
-  s.version       = '2.5.1'
-  s.platform      = :ios, '5.1.1'
+  s.version       = '2.5.9'
+  s.platform      = :ios, '6.0'
   s.summary       = 'Drop in sharing features for all iPhone and iPad apps.'
   s.homepage      = 'http://getsharekit.com/'
   s.author        = 'ShareKit Community'
@@ -12,22 +12,26 @@ Pod::Spec.new do |s|
                                %Q|The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n| +
                                %Q|THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE| }
   
-  non_arc_files = 'Classes/ShareKit/Core/Helpers/OAuth/**/*.{h,m}', 'Classes/ShareKit/Core/Categories/GTMNSString+HTML.m'
+  non_arc_files = 'Classes/ShareKit/Core/Helpers/OAuth/**/*.{h,m}', 'Classes/ShareKit/Core/Categories/GTMNSString+HTML.{h,m}', 'Classes/ShareKit/Core/Helpers/Debug.h'
 
   s.subspec 'Core' do |core|
     core.resource_bundle = {'ShareKit' => ['Classes/ShareKit/Core/SHKSharers.plist', 'Classes/ShareKit/Localization/*.lproj', 'Classes/ShareKit/*.png']}
     core.source_files  = 'Classes/ShareKit/{Configuration,Core,UI}/**/*.{h,m,c}', 'Classes/ShareKit/Sharers/Actions/**/*.{h,m,c}'
     core.exclude_files = non_arc_files
     core.frameworks    = 'SystemConfiguration', 'Security', 'MessageUI', "AVFoundation", "MobileCoreServices", "CoreMedia", "Social"
-    core.dependency 'SSKeychain', '~> 0.2.1'
-    core.dependency 'SSToolkit', '~> 1.0.4'
+    core.dependency 'SSKeychain', '~> 1.2.2'
+    core.dependency 'SAMTextView', '~> 0.2.1'
     core.dependency 'ShareKit/Reachability'
     core.dependency 'ShareKit/NoARC'
+    core.dependency 'SDWebImage'
+    core.dependency 'UIActivityIndicator-for-SDWebImage'
   end
 
   s.subspec 'NoARC' do |noarc|
+    noarc.dependency 'PKMultipartInputStream'
     noarc.requires_arc = false
     noarc.source_files = non_arc_files
+    noarc.dependency 'ShareKit/Core'
   end
 
   s.subspec 'Reachability' do |reachability|
@@ -37,7 +41,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'Evernote' do |evernote|
     evernote.source_files = 'Classes/ShareKit/Sharers/Services/Evernote/**/*.{h,m}'
-    evernote.dependency 'Evernote-SDK-iOS', '~> 1.3.0'
+    evernote.dependency 'Evernote-SDK-iOS', '~> 1.3.1'
     evernote.dependency 'ShareKit/Core'
     evernote.libraries = 'xml2'
     evernote.xcconfig = { 'HEADER_SEARCH_PATHS' => '$(SDKROOT)/usr/include/libxml2' }
@@ -52,7 +56,6 @@ Pod::Spec.new do |s|
   s.subspec 'Flickr' do |flickr|
     flickr.source_files = 'Classes/ShareKit/Sharers/Services/Flickr/SHK*.{h,m}'
     flickr.framework = 'SystemConfiguration', 'CFNetwork'
-    flickr.dependency 'objectiveflickr', "~> 2.0"
     flickr.dependency 'ShareKit/Core'
   end
 
@@ -149,6 +152,30 @@ Pod::Spec.new do |s|
   s.subspec 'Instagram' do |instagram|
     instagram.source_files = 'Classes/ShareKit/Sharers/Services/Instagram/**/*.{h,m}'
     instagram.dependency 'ShareKit/Core'
+  end
+  
+  s.subspec 'Imgur' do |imgur|
+    imgur.source_files = 'Classes/ShareKit/Sharers/Services/Imgur/**/*.{h,m}'
+    imgur.dependency 'ShareKit/Core'
+  end
+
+  s.subspec 'Pinterest' do |pinterest|
+    pinterest.source_files = 'Classes/ShareKit/Sharers/Services/Pinterest/**/*.{h,m}'
+    pinterest.dependency 'Pinterest-iOS'
+    pinterest.dependency 'ShareKit/Core'
+  end
+
+  s.subspec 'OneNote' do |onenote|
+    onenote.source_files = 'Classes/ShareKit/Sharers/Services/OneNote/**/*.{h,m}'
+    onenote.dependency 'ShareKit/Core'
+    onenote.vendored_frameworks = 'Frameworks/LiveSDK.framework'
+    onenote.resource = 'Frameworks/LiveSDK.framework'
+  end
+
+  s.subspec 'ReadingList' do |readinglist|
+    readinglist.source_files = 'Classes/ShareKit/Sharers/Services/Reading List/**/*.{h,m}'
+    readinglist.dependency 'ShareKit/Core'
+    readinglist.weak_frameworks    = 'SafariServices'
   end
 
   # s.subspec 'GooglePlus' do |googleplus|

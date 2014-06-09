@@ -12,7 +12,8 @@
 #import "ExampleShareText.h"
 #import "ExampleShareFile.h"
 #import "SHK.h"
-#import "ExampleAccountsViewController.h"
+#import "SHKAccountsViewController.h"
+#import "SHKUploadsViewController.h"
 
 @interface RootViewController ()
 
@@ -24,12 +25,15 @@
 {
 	[super loadView];
 	
-	self.toolbarItems = [NSArray arrayWithObjects:
-						 [[UIBarButtonItem alloc] initWithTitle:SHKLocalizedString(@"Accounts") style:UIBarButtonItemStyleBordered target:self action:@selector(showAccounts)],
-                         /*
-                         [[UIBarButtonItem alloc] initWithTitle:SHKLocalizedString(@"Facebook Connect") style:UIBarButtonItemStyleBordered target:self action:@selector(facebookConnect)],*/
-						 nil
-						 ];	
+	self.toolbarItems = @[[[UIBarButtonItem alloc] initWithTitle:SHKLocalizedString(@"Accounts")
+                                                           style:UIBarButtonItemStyleBordered
+                                                          target:self
+                                                          action:@selector(showAccounts)],
+                          [[UIBarButtonItem alloc] initWithTitle:SHKLocalizedString(@"Uploads")
+                                                           style:UIBarButtonItemStyleBordered
+                                                          target:self
+                                                          action:@selector(showUploads)]];
+
 }
 
 - (void)viewDidLoad
@@ -149,16 +153,14 @@
 
 #pragma mark -
 
-- (void)showAccounts
-{
-    ExampleAccountsViewController *accountsViewController = [[ExampleAccountsViewController alloc] init];
+- (void)showAccounts {
     
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:accountsViewController];
+    [SHKAccountsViewController openFromViewController:self];
+}
+
+- (void)showUploads {
     
-    [self presentViewController:navigationController
-                       animated:YES
-                     completion:^{
-                     }];
+    [SHKUploadsViewController openFromViewController:self];
 }
 
 - (void)authDidFinish:(NSNotification*)notification

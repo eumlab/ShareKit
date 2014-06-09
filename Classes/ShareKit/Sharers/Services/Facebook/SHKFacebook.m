@@ -114,12 +114,12 @@ static SHKFacebook *requestingPermisSHKFacebook=nil;
     
     if (allowLoginUI || (session.state == FBSessionStateCreatedTokenLoaded)) {
         
-		if (allowLoginUI) [[SHKActivityIndicator currentIndicator] displayActivity:SHKLocalizedString(@"Logging In...")];
+		if (allowLoginUI) [self displayActivity:SHKLocalizedString(@"Logging In...")];
         
         [FBSession setActiveSession:session];
         [session openWithBehavior:FBSessionLoginBehaviorUseSystemAccountIfPresent
 				completionHandler:^(FBSession *session, FBSessionState state, NSError *error) {
-					if (allowLoginUI) [[SHKActivityIndicator currentIndicator] hide];
+					if (allowLoginUI) [self hideActivityIndicator];
 					[self sessionStateChanged:session state:state error:error];
 				}];
         result = session.isOpen;
@@ -343,7 +343,7 @@ static SHKFacebook *requestingPermisSHKFacebook=nil;
 			 indexOfObject:@"publish_actions"] == NSNotFound) {	// we need at least this.SHKCONFIG(facebookWritePermissions
 			// No permissions found in session, ask for it
 			[self saveItemForLater:SHKPendingSend];
-			[[SHKActivityIndicator currentIndicator] displayActivity:SHKLocalizedString(@"Authenticating...")];
+			[self displayActivity:SHKLocalizedString(@"Authenticating...")];
 			if(requestingPermisSHKFacebook == nil){
 				requestingPermisSHKFacebook = self;
 			}
@@ -351,7 +351,7 @@ static SHKFacebook *requestingPermisSHKFacebook=nil;
                                                   defaultAudience:FBSessionDefaultAudienceFriends
                                                 completionHandler:^(FBSession *session, NSError *error) {
                                                     [self restoreItem];
-                                                    [[SHKActivityIndicator currentIndicator] hide];
+                                                    [self hideActivityIndicator];
                                                     requestingPermisSHKFacebook = nil;
                                                     if (error && error.fberrorShouldNotifyUser) {
                                                         UIAlertView *alertView = [[UIAlertView alloc]
@@ -403,7 +403,7 @@ static SHKFacebook *requestingPermisSHKFacebook=nil;
     if (self.item.shareType != SHKShareTypeUserInfo &&[FBSession.activeSession.permissions indexOfObject:@"publish_actions"] == NSNotFound) {	// we need at least this.SHKCONFIG(facebookWritePermissions
         // No permissions found in session, ask for it
         [self saveItemForLater:SHKPendingSend];
-        [[SHKActivityIndicator currentIndicator] displayActivity:SHKLocalizedString(@"Authenticating...")];
+        [self displayActivity:SHKLocalizedString(@"Authenticating...")];
         if(requestingPermisSHKFacebook == nil){
             requestingPermisSHKFacebook = self;
         }
@@ -411,7 +411,7 @@ static SHKFacebook *requestingPermisSHKFacebook=nil;
                                               defaultAudience:FBSessionDefaultAudienceFriends
                                             completionHandler:^(FBSession *session, NSError *error) {
                                                 [self restoreItem];
-                                                [[SHKActivityIndicator currentIndicator] hide];
+                                                [self hideActivityIndicator];
                                                 requestingPermisSHKFacebook = nil;
                                                 if (error) {
                                                     
@@ -484,14 +484,14 @@ static SHKFacebook *requestingPermisSHKFacebook=nil;
         [self validateVideoLimits:^(NSError *error){
             
             if (error){
-                [[SHKActivityIndicator currentIndicator] hide];
+                [self hideActivityIndicator];
                 [self sendDidFailWithError:error];
                 [self sendDidFinish];
                 return;
             }
             
             if (error) {
-                [[SHKActivityIndicator currentIndicator] hide];
+                [self hideActivityIndicator];
                 [self sendDidFailWithError:error];
                 [self sendDidFinish];
                 return;
@@ -529,7 +529,7 @@ static SHKFacebook *requestingPermisSHKFacebook=nil;
         [self.pendingConnections removeObject:connection];
         
         if(error){
-            [[SHKActivityIndicator currentIndicator] hide];
+            [self hideActivityIndicator];
             [self sendDidFailWithError:error];
             
             return;
@@ -572,7 +572,7 @@ static SHKFacebook *requestingPermisSHKFacebook=nil;
 	}
 	[self.pendingConnections removeObject:connection];
 	if (error) {
-		[[SHKActivityIndicator currentIndicator] hide];
+		[self hideActivityIndicator];
 		[self sendDidFailWithError:error];
 	}else{
 		[result convertNSNullsToEmptyStrings];
@@ -591,7 +591,7 @@ static SHKFacebook *requestingPermisSHKFacebook=nil;
 	}
 	[self.pendingConnections removeObject:connection];
 	if(error){
-		[[SHKActivityIndicator currentIndicator] hide];
+		[self hideActivityIndicator];
 		//check if user revoked app permissions
 		NSDictionary *response = [error.userInfo valueForKey:FBErrorParsedJSONResponseKey];
         
