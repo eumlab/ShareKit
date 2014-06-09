@@ -192,7 +192,7 @@ Pod::Spec.new do |s|
   s.subspec 'YouTube' do |youtube|
     youtube.source_files = 'Classes/ShareKit/Sharers/Services/YouTube/**/*.{h,m}'
     youtube.dependency 'ShareKit/Core'
-    youtube.dependency 'Google-API-Client/Services/YouTube'
+    youtube.dependency 'Google-API-Client/YouTube'
     youtube.dependency 'Google-API-Client/Common'
     youtube.dependency 'Google-API-Client/Objects'
     youtube.dependency 'Google-API-Client/Utilities'
